@@ -1,5 +1,7 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,12 +14,16 @@ public class Venda {
     @OneToOne
     private Usuario usuario;
 
+    @JsonIgnore
+    private boolean finalizada;
+
     private Venda() {
     }
 
     public Venda(Long id, Usuario usuario) {
         this.id = id;
         this.usuario = usuario;
+        this.finalizada = false;
     }
 
     public Long getId() {
@@ -34,5 +40,13 @@ public class Venda {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public boolean isFinalizada() {
+        return finalizada;
+    }
+
+    public void setFinalizada(boolean finalizada) {
+        this.finalizada = finalizada;
     }
 }

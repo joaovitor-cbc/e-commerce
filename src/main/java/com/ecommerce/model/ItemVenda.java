@@ -3,6 +3,7 @@ package com.ecommerce.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "itemvenda")
 public class ItemVenda {
 
     @Id
