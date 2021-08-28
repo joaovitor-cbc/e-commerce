@@ -1,0 +1,54 @@
+--Scripts para criação de Banco e tabelas
+create database ecommerce;
+
+--Tabela Usuario
+create table usuario
+(
+id SERIAL primary key,
+nome varchar(50) not null,
+cpf varchar(14) not null unique,
+email varchar(40) not null
+);
+
+
+--Tabela Venda
+create table venda
+(
+id SERIAL primary key,
+usuario_id BigInt not null,
+finalizada boolean
+);
+
+
+-- Regra Tabela venda
+alter table venda  add constraint fk_venda_usuario
+foreign key(usuario_id) references usuario(id);
+
+--Tabela Produto
+create table produto
+(
+id SERIAL primary key,
+nome varchar(50) not null unique,
+preco decimal(10,2) not null,
+quantidade BigInt not null
+);
+
+
+--Tabela ItemVenda
+create table itemvenda
+(
+id SERIAL primary key,
+produto_id BigInt not null,
+quantidade BigInt not null,
+venda_id BigInt not null
+);
+-- Regra Tabela item
+alter table itemvenda  add constraint fk_itemvenda_produto
+foreign key(produto_id) references produto(id);
+-- Regra Tabela item
+alter table itemvenda  add constraint fk_itemvenda_venda
+foreign key(venda_id) references venda(id);
+-- Regra Tabela item
+alter table produto  add constraint ck_itemvenda_quantidade
+check(quantidade > 0);
+

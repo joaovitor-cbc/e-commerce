@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 public class VendaService {
 
@@ -34,5 +32,15 @@ public class VendaService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "venda não cadastrada, " +
                         "id venda invalido"));
         return venda;
+    }
+
+    public void finalizarVenda(Venda venda){
+        venda.setFinalizada(true);
+        vendaRepository.save(venda);
+    }
+    public void verificarVendaFinalizada(Venda venda){
+        if(venda.isFinalizada()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "venda já finalizada");
+        }
     }
 }

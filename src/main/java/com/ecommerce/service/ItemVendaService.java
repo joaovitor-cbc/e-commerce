@@ -2,15 +2,12 @@ package com.ecommerce.service;
 
 import com.ecommerce.model.ItemVenda;
 import com.ecommerce.model.Produto;
-import com.ecommerce.model.Usuario;
 import com.ecommerce.model.Venda;
 import com.ecommerce.repository.ItemVendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Service
 public class ItemVendaService {
@@ -28,12 +25,21 @@ public class ItemVendaService {
     private UsuarioService usuarioService;
 
     public ItemVenda savarItemVenda(ItemVenda itemVenda){
+        //verificar existencia de produto
         Produto produto = produtoService.validarProdutoEstoque(itemVenda.getProduto().getId());
+        // verificar qtd do pedido do item
         int qtdPedido = validarrQuantidadePedido(itemVenda.getQuantidade());
+        // validar id de venda
         Venda venda = vendaService.validarVenda(itemVenda.getVenda().getId());
+        //validar id usuario
         usuarioService.validarUsuario(itemVenda.getVenda().getUsuario().getId());
-        validaridItemVendaIdVenda(itemVenda, venda);
+        //verificar se id da venda já foi finalizada
+        vendaService.verificarVendaFinalizada(venda);
+        //atualizar quantidade de produto em estoque
         produtoService.atualizarQuantidadeProdutoEstoque(qtdPedido, produto);
+        //finalizar id da venda
+        vendaService.finalizarVenda(venda);
+        //salva comprar com todos os dados necessario
         return itemVendaRepository.save(itemVenda);
     }
 
@@ -43,19 +49,5 @@ public class ItemVendaService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantidade do item invalido");
         }
         return qtdPedido;
-    }
-
-    private void validaridItemVendaIdVenda(ItemVenda itemVenda, Venda venda){
-        verificarExistenciaItemVenda(itemVenda);
-        if(itemVenda.getVenda().getId().equals(venda.getId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "id de venda já utilizado em uma outra compra");
-        }
-    }
-
-    private void verificarExistenciaItemVenda(ItemVenda itemVenda){
-        Optional<Long> idItemVenda = Optional.ofNullable(itemVenda.getId());
-        if(idItemVenda.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "id de item venda já utilizado em uma outra compra");
-        }
     }
 }
