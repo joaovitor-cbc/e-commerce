@@ -16,8 +16,8 @@ public class VendaController {
 
     @PostMapping("/registrar")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Venda iniciarCompra(@RequestBody Venda venda){
-        return vendaService.criarVenda(venda);
+    public Venda iniciarCompra(@RequestBody Venda vendaInput){
+        return vendaService.criarVenda(vendaInput);
     }
 
 }
