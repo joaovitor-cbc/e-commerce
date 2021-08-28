@@ -16,17 +16,21 @@ public class ProdutoService {
     private ProdutoRepository produtoRepository;
 
     public Produto savarProduto(Produto produto){
-        if(verificarExistenciaProduto(produto.getNome())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "produto já cadastrado");
-        }
+        verificarExistenciaProduto(produto.getNome());
+        verificarQuantidadeProduto(produto.getQuantidade());
         return produtoRepository.save(produto);
     }
 
-    public Boolean verificarExistenciaProduto(String nome){
+    public void verificarExistenciaProduto(String nome){
         Optional<Produto> produtoOptional = produtoRepository.findByNome(nome);
         if(produtoOptional.isPresent()){
-            return true;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "produto já cadastrado");
         }
-        return false;
+    }
+
+    public void verificarQuantidadeProduto(int qtdProduto){
+        if(qtdProduto <= 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantidade do produto invalido");
+        }
     }
 }
