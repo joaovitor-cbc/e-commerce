@@ -10,6 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
+
 @Service
 public class UsuarioService {
 
@@ -17,9 +20,11 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario savarUsuario(Usuario usuario){
-        // verificar se usuario existi
-        Optional<Usuario> usuarioExiste = Optional.ofNullable(usuarioRepository.findById(usuario.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "usuario já cadastrado")));
+        // verificar se usuario existe
+        Optional<Usuario> usuarioExiste = usuarioRepository.findBycpf(usuario.getCpf());
+        if (usuarioExiste.isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "usuario já cadastrado");
+        }
         return usuarioRepository.save(usuario);
     }
 }
