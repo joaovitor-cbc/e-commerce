@@ -32,6 +32,7 @@ public class ItemVendaService {
         int qtdPedido = validarrQuantidadePedido(itemVenda.getQuantidade());
         Venda venda = vendaService.validarVenda(itemVenda.getVenda().getId());
         usuarioService.validarUsuario(itemVenda.getVenda().getUsuario().getId());
+        validaridItemVendaIdVenda(itemVenda, venda);
         produtoService.atualizarQuantidadeProdutoEstoque(qtdPedido, produto);
         return itemVendaRepository.save(itemVenda);
     }
@@ -42,5 +43,19 @@ public class ItemVendaService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantidade do item invalido");
         }
         return qtdPedido;
+    }
+
+    private void validaridItemVendaIdVenda(ItemVenda itemVenda, Venda venda){
+        verificarExistenciaItemVenda(itemVenda);
+        if(itemVenda.getVenda().getId().equals(venda.getId())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "id de venda já utilizado em uma outra compra");
+        }
+    }
+
+    private void verificarExistenciaItemVenda(ItemVenda itemVenda){
+        Optional<Long> idItemVenda = Optional.ofNullable(itemVenda.getId());
+        if(idItemVenda.isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "id de item venda já utilizado em uma outra compra");
+        }
     }
 }
