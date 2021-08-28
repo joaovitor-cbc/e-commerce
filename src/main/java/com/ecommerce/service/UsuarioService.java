@@ -33,4 +33,8 @@ public class UsuarioService {
         }
         return false;
     }
+    public void validarUsuario(Long idUsuario){
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "usuario não cadastrado"));
+    }
 }

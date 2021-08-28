@@ -33,4 +33,25 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantidade do produto invalido");
         }
     }
+
+    public Produto validarProdutoEstoque(Long idProduto){
+        Produto produto = produtoRepository.findById(idProduto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "produto não cadastrado"));
+        return produto;
+    }
+
+    public void atualizarQuantidadeProdutoEstoque(int qtdPedido, Produto produto){
+        verificarQuantidadeProdutoEstoque(qtdPedido, produto);
+        int qtdAtualProduto = produto.getQuantidade() - qtdPedido;
+        produto.setQuantidade(qtdAtualProduto);
+        produtoRepository.save(produto);
+
+    }
+
+    private void verificarQuantidadeProdutoEstoque(int qtdPedido, Produto produto){
+        if( qtdPedido > produto.getQuantidade()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantidade do item do pedido maior " +
+                    "do que o produto em estoque");
+        }
+    }
 }

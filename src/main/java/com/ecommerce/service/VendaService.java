@@ -22,9 +22,17 @@ public class VendaService {
         validarVendaUsuario(venda.getUsuario().getCpf());
         return vendaRepository.save(venda);
     }
+
     public void validarVendaUsuario(String cpfUsuario){
         if(!usuarioService.verificarExistenciaUsuario(cpfUsuario)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "usuario não cadastrado");
         }
+    }
+
+    public Venda validarVenda(Long idVenda){
+        Venda venda = vendaRepository.findById(idVenda)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "venda não cadastrada, " +
+                        "id venda invalido"));
+        return venda;
     }
 }
