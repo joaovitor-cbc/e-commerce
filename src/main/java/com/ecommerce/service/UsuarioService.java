@@ -20,11 +20,17 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario savarUsuario(Usuario usuario){
-        // verificar se usuario existe
-        Optional<Usuario> usuarioExiste = usuarioRepository.findBycpf(usuario.getCpf());
-        if (usuarioExiste.isPresent()){
+        if (verificarExistenciaUsuario(usuario.getCpf())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "usuario já cadastrado");
         }
         return usuarioRepository.save(usuario);
+    }
+    public Boolean verificarExistenciaUsuario(String cpf){
+        // verificar se usuario existe
+        Optional<Usuario> usuarioExiste = usuarioRepository.findBycpf(cpf);
+        if (usuarioExiste.isPresent()){
+            return true;
+        }
+        return false;
     }
 }
