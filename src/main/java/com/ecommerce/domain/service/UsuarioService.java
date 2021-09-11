@@ -21,11 +21,12 @@ public class UsuarioService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Usuario savarUsuario(Usuario usuario){
-        if (verificarExistenciaUsuario(usuario.getCpf())){
+    public UsuarioModel savarUsuario(UsuarioInput usuarioInput){
+        Usuario UsuarioEntity = toUsuarioEntity(usuarioInput);
+        if (verificarExistenciaUsuario(UsuarioEntity.getCpf())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "usuario já cadastrado");
         }
-        return usuarioRepository.save(usuario);
+        return toUsuarioModel(usuarioRepository.save(UsuarioEntity));
     }
     public Boolean verificarExistenciaUsuario(String cpf){
         // verificar se usuario existe

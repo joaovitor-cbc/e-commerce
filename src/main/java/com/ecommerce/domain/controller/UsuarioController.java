@@ -1,5 +1,7 @@
 package com.ecommerce.domain.controller;
 
+import com.ecommerce.DTO.UsuarioInput;
+import com.ecommerce.DTO.UsuarioModel;
 import com.ecommerce.domain.model.Usuario;
 import com.ecommerce.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ public class UsuarioController {
 
     @PostMapping("/criar-usuario")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Usuario criarUsuario(@RequestBody Usuario usuarioInput){
+    public UsuarioModel criarUsuario(@RequestBody UsuarioInput usuarioInput){
         return usuarioService.savarUsuario(usuarioInput);
     }
 }
