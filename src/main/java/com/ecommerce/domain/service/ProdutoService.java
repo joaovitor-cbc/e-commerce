@@ -1,7 +1,10 @@
 package com.ecommerce.domain.service;
 
+import com.ecommerce.DTO.ProdutoInput;
+import com.ecommerce.DTO.ProdutoModel;
 import com.ecommerce.domain.model.Produto;
 import com.ecommerce.domain.repository.ProdutoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,10 +18,14 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public Produto savarProduto(Produto produto){
-        verificarExistenciaProduto(produto.getNome());
-        verificarQuantidadeProduto(produto.getQuantidade());
-        return produtoRepository.save(produto);
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public ProdutoModel savarProduto(ProdutoInput produtoInput){
+        Produto produtoEntity = toProdutoEntity(produtoInput);
+        verificarExistenciaProduto(produtoEntity.getNome());
+        verificarQuantidadeProduto(produtoEntity.getQuantidade());
+        return toProdutoModel(produtoRepository.save(produtoEntity));
     }
 
     public void verificarExistenciaProduto(String nome){
@@ -53,5 +60,13 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantidade do item do pedido maior " +
                     "do que o produto em estoque");
         }
+    }
+
+    private ProdutoModel toProdutoModel(Produto produto){
+        return modelMapper.map(produto, ProdutoModel.class);
+    }
+
+    private Produto toProdutoEntity(ProdutoInput produtoInput){
+        return modelMapper.map(produtoInput, Produto.class);
     }
 }

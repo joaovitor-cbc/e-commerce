@@ -1,5 +1,7 @@
 package com.ecommerce.domain.controller;
 
+import com.ecommerce.DTO.ProdutoInput;
+import com.ecommerce.DTO.ProdutoModel;
 import com.ecommerce.domain.model.Produto;
 import com.ecommerce.domain.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ public class ProdutoController {
 
     @PostMapping("/registrar-produto")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Produto registarProduto(@RequestBody Produto produtoInput){
+    public ProdutoModel registarProduto(@RequestBody ProdutoInput produtoInput){
         return produtoService.savarProduto(produtoInput);
     }
 }
