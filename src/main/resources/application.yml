@@ -1,0 +1,9 @@
+server:
+  error:
+    include-stacktrace: on-param
+    include-message: always
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/ecommerce"
+    username: "postgres"
+    password: "admin"

@@ -1,0 +1,67 @@
+Para criar um usuario:
+***Metodo POST***
+
+localhost:8080/api/usuario/criar-usuario
+
+Json:
+
+{
+   "nome":"João Vitor",
+   "cpf":"123.456.789-00",
+   "email":"teste@teste.com"
+}
+
+Para iniciar uma compra:
+***Metodo POST***
+
+localhost:8080/api/iniciar-compra/registrar
+
+Json:
+
+{
+   "usuario":{
+      "id":1,
+      "nome":"João Vitor",
+      "cpf":"123.456.789-00",
+      "email":"teste@teste.com"
+   }
+}
+
+Para registrar um produto:
+***Metodo POST***
+
+localhost:8080/api/produto/registrar-produto
+
+Json:
+
+{
+   "nome":"PS4",
+   "preco":"4000.00",
+   "quantidade":10
+}
+
+Para finalizar uma compra:
+***Metodo POST***
+
+localhost:8080/api/item-venda/finalizar-compra
+
+Json:
+
+{
+   "produto":{
+      "id":1,
+      "nome":"PS4",
+      "preco":"4000.00",
+      "quantidade":10
+   },
+   "quantidade":7,
+   "venda":{
+      "id":3,
+      "usuario":{
+         "id":1,
+         "nome":"João Vitor",
+         "cpf":"123.456.789.00",
+         "email":"teste@teste.com"
+      }
+   }
+}
